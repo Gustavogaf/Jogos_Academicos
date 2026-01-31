@@ -66,7 +66,7 @@ namespace Jogos_Academicos.Services
                             EventoId = grupo.EventoId,
                             EquipeAId = timeA.Id,
                             EquipeBId = timeB.Id,
-                            DataHora = DateTime.Now.AddDays(rodada + 1), // Agenda 1 rodada por dia (simulação)
+                            DataHora = grupo.Evento.Data.AddDays(rodada), // Agenda 1 rodada por dia (simulação)
                             Finalizado = false,
 
                             // Sorteia um árbitro aleatório

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Jogos_Academicos.Models.Equipe>
+
+@{
+    ViewData["Title"] = "Minhas Equipes";
+}
+
+<div class="container" style="padding: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="color: #6d28d9;">Minhas Equipes</h2>
+        <a asp-action="Criar" class="btn btn-primary" style="background-color: #6d28d9; border: none;">+ Nova Equipe</a>
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success">@TempData["Sucesso"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">
+            Você ainda não cadastrou nenhuma equipe. Clique no botão acima para começar.
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead style="background-color: #f8f9fa;">
+                <tr>
+                    <th>Nome da Equipe</th>
+                    <th>Modalidade</th>
+                    <th>Curso</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="font-weight: bold;">@item.Nome</td>
+                        <td>@item.Esporte?.Nome</td>
+                        <td>@item.Curso?.Nome</td>
+                        <td><span class="badge bg-success">Ativa</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div style="margin-top: 20px;">
+        <a asp-controller="Home" asp-action="Index" style="color: #666;">&larr; Voltar ao Início</a>
+    </div>
+</div>

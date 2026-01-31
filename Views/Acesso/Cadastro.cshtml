@@ -1,0 +1,88 @@
+﻿@model Jogos_Academicos.Models.Usuario
+
+@{
+    ViewData["Title"] = "Cadastro de Atleta";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Jogos Acadêmicos</title>
+    <link rel="stylesheet" href="~/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box" style="height: auto; padding: 40px;">
+            <h2>Cadastro de Atleta</h2>
+            <p style="color: #666; margin-bottom: 20px;">Preencha seus dados para participar</p>
+
+            @if (ViewBag.Erro != null)
+            {
+                <div style="background-color: #fce4e4; color: #cc0033; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 0.9em;">
+                    @ViewBag.Erro
+                </div>
+            }
+
+            <form asp-action="Cadastro" method="post">
+                <div class="input-box">
+                    <label asp-for="NomeCompleto">Nome Completo</label>
+                    <input asp-for="NomeCompleto" placeholder="Seu nome completo" required />
+                    <span asp-validation-for="NomeCompleto" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <div class="input-box">
+                    <label asp-for="Matricula">Matrícula</label>
+                    <input asp-for="Matricula" placeholder="Sua matrícula" required />
+                    <span asp-validation-for="Matricula" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <div class="input-box">
+                    <label asp-for="Apelido">Apelido</label>
+                    <input asp-for="Apelido" placeholder="Como gosta de ser chamado" />
+                    <span asp-validation-for="Apelido" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <div class="input-box">
+                    <label asp-for="Telefone">Telefone / WhatsApp</label>
+                    <input asp-for="Telefone" placeholder="(XX) 99999-9999" />
+                    <span asp-validation-for="Telefone" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <div class="input-box">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email" placeholder="seu.email@academico.com" required />
+                    <span asp-validation-for="Email" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <div class="input-box">
+                    <label asp-for="CursoId">Seu Curso</label>
+                    <select asp-for="CursoId" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none;"
+                            asp-items="@(new SelectList(ViewBag.Cursos, "Id", "Nome"))">
+                        <option value="">Selecione um curso...</option>
+                    </select>
+                    <span asp-validation-for="CursoId" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <div class="input-box">
+                    <label asp-for="Senha">Senha</label>
+                    <input asp-for="Senha" type="password" placeholder="Crie uma senha" required />
+                    <span asp-validation-for="Senha" style="color: red; font-size: 0.8em;"></span>
+                </div>
+
+                <button type="submit" class="btn-entrar">Cadastrar</button>
+
+                <div class="links" style="margin-top: 20px; text-align: center;">
+                    <a asp-action="Login">Já tem conta? Faça Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
