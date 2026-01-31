@@ -19,126 +19,119 @@ namespace Jogos_Academicos.Data
         public DbSet<Equipe> Equipes { get; set; }
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<Grupo> Grupos { get; set; }
-
         public DbSet<Jogo> Jogos { get; set; }
-
         public DbSet<ClassificacaoGrupo> Classificacoes { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // --- USUÁRIO ---
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasIndex(u => u.Email).IsUnique();
                 entity.HasIndex(u => u.Matricula).IsUnique();
                 entity.Property(u => u.TipoUsuario).HasConversion<string>();
 
-                // Evitar cascata: Se deletar Curso, não deletar o Usuario (apenas seta null)
                 entity.HasOne(u => u.Curso)
-                      .WithMany(c => c.Atletas) // Assumindo que Curso tem lista de Atletas
+                      .WithMany(c => c.Atletas)
                       .HasForeignKey(u => u.CursoId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // --- Configuração de Relacionamentos Many-to-Many ---
+            // --- EQUIPE ---
+            modelBuilder.Entity<Equipe>(entity =>
+            {
+                // Equipe <-> Atleta (Many-to-Many)
+                entity.HasMany(e => e.Atletas)
+                      .WithMany()
+                      .UsingEntity(j => j.ToTable("equipe_atleta"));
 
-            // Equipe <-> Atleta
-            modelBuilder.Entity<Equipe>()
-                .HasMany(e => e.Atletas)
-                .WithMany()
-                .UsingEntity(j => j.ToTable("equipe_atleta"));
+                // Esporte -> Equipe (Restrict)
+                entity.HasOne(e => e.Esporte)
+                      .WithMany(s => s.Equipes)
+                      .HasForeignKey(e => e.EsporteId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            // Grupo <-> Equipe (Onde deu o erro)
-            modelBuilder.Entity<Grupo>()
-                .HasMany(g => g.Equipes)
-                .WithMany(e => e.Grupos)
-                .UsingEntity(j => j.ToTable("grupos_equipes"));
+                // Curso -> Equipe (Restrict)
+                entity.HasOne(e => e.Curso)
+                      .WithMany(c => c.Equipes)
+                      .HasForeignKey(e => e.CursoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
 
-            // --- CORREÇÃO DO ERRO DE CICLO (Restrict) ---
+            // --- GRUPO ---
+            modelBuilder.Entity<Grupo>(entity =>
+            {
+                // Grupo <-> Equipe (Many-to-Many)
+                entity.HasMany(g => g.Equipes)
+                      .WithMany(e => e.Grupos)
+                      .UsingEntity(j => j.ToTable("grupos_equipes"));
+            });
 
-            // 1. Esporte -> Equipe (Se deletar Esporte, NÃO deleta Equipe automaticamente)
-            modelBuilder.Entity<Equipe>()
-                .HasOne(e => e.Esporte)
-                .WithMany(s => s.Equipes)
-                .HasForeignKey(e => e.EsporteId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // --- EVENTO ---
+            modelBuilder.Entity<Evento>(entity =>
+            {
+                entity.Property(e => e.Nivel).HasConversion<string>();
 
-            // 2. Esporte -> Evento (Se deletar Esporte, NÃO deleta Evento automaticamente)
-            modelBuilder.Entity<Evento>()
-                .HasOne(e => e.Esporte)
-                .WithMany(s => s.Eventos)
-                .HasForeignKey(e => e.EsporteId)
-                .OnDelete(DeleteBehavior.Restrict);
+                // Esporte -> Evento (Restrict)
+                entity.HasOne(e => e.Esporte)
+                      .WithMany(s => s.Eventos)
+                      .HasForeignKey(e => e.EsporteId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
 
-            // 3. Curso -> Equipe (Prevenção extra)
-            modelBuilder.Entity<Equipe>()
-                .HasOne(e => e.Curso)
-                .WithMany(c => c.Equipes)
-                .HasForeignKey(e => e.CursoId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // --- CURSO ---
+            modelBuilder.Entity<Curso>()
+                .Property(c => c.Nivel).HasConversion<string>();
 
-            // --- Conversão de Enums ---
-            modelBuilder.Entity<Curso>().Property(c => c.Nivel).HasConversion<string>();
-            modelBuilder.Entity<Evento>().Property(e => e.Nivel).HasConversion<string>();
-
-            modelBuilder.Entity<Jogo>()
-                .HasOne(j => j.EquipeA).WithMany().HasForeignKey(j => j.EquipeAId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Jogo>()
-                .HasOne(j => j.EquipeB).WithMany().HasForeignKey(j => j.EquipeBId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Jogo>()
-                .HasOne(j => j.Arbitro).WithMany().HasForeignKey(j => j.ArbitroId).OnDelete(DeleteBehavior.Restrict);
+            // --- JOGO (Configurações consolidadas) ---
             modelBuilder.Entity<Jogo>(entity =>
             {
-                // Jogo -> Equipe A (Restrict)
+                // CORREÇÃO CRÍTICA DO EVENTO (Evita EventoId1)
+                entity.HasOne(j => j.Evento)
+                      .WithMany(e => e.Jogos) // Garante que Evento.Jogos mapeie corretamente
+                      .HasForeignKey(j => j.EventoId)
+                      .OnDelete(DeleteBehavior.NoAction); // NoAction para evitar ciclos
+
+                // Relacionamento com Grupo (Opcional)
+                entity.HasOne(j => j.Grupo)
+                      .WithMany(g => g.Jogos)
+                      .HasForeignKey(j => j.GrupoId)
+                      .OnDelete(DeleteBehavior.NoAction);
+
+                // Equipes e Árbitro (Restrict para evitar cascading delete indesejado)
                 entity.HasOne(j => j.EquipeA)
                       .WithMany()
                       .HasForeignKey(j => j.EquipeAId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                // Jogo -> Equipe B (Restrict)
                 entity.HasOne(j => j.EquipeB)
                       .WithMany()
                       .HasForeignKey(j => j.EquipeBId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                // Jogo -> Arbitro (Restrict)
                 entity.HasOne(j => j.Arbitro)
                       .WithMany()
                       .HasForeignKey(j => j.ArbitroId)
                       .OnDelete(DeleteBehavior.Restrict);
-
-                // --- CORREÇÃO DO ERRO ATUAL (FK_jogos_grupos_GrupoId) ---
-
-                // Jogo -> Grupo (Se deletar Grupo, NÃO deleta Jogo em cascata)
-                entity.HasOne(j => j.Grupo)
-                      .WithMany(g => g.Jogos) // ou .WithMany(g => g.Jogos) se tiver a lista no Model
-                      .HasForeignKey(j => j.GrupoId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                // Jogo -> Evento (Preventivo: Se deletar Evento, NÃO deleta Jogo em cascata via FK direta)
-                entity.HasOne(j => j.Evento)
-                      .WithMany()
-                      .HasForeignKey(j => j.EventoId)
-                      .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // Configuração ClassificacaoGrupo
-            modelBuilder.Entity<ClassificacaoGrupo>()
-                .HasIndex(c => new { c.GrupoId, c.EquipeId }).IsUnique(); // Impede duplicata
+            // --- CLASSIFICAÇÃO ---
+            modelBuilder.Entity<ClassificacaoGrupo>(entity =>
+            {
+                entity.HasIndex(c => new { c.GrupoId, c.EquipeId }).IsUnique();
 
-            modelBuilder.Entity<ClassificacaoGrupo>()
-                .HasOne(c => c.Grupo)
-                .WithMany() // Se Grupo tiver lista de Classificacao, ponha .WithMany(g => g.Classificacoes)
-                .HasForeignKey(c => c.GrupoId)
-                .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(c => c.Grupo)
+                      .WithMany()
+                      .HasForeignKey(c => c.GrupoId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ClassificacaoGrupo>()
-                .HasOne(c => c.Equipe)
-                .WithMany()
-                .HasForeignKey(c => c.EquipeId)
-                .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(c => c.Equipe)
+                      .WithMany()
+                      .HasForeignKey(c => c.EquipeId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Jogos Acadêmicos</title>
-    <link rel="stylesheet" href="~/estilo_css/coordenador.css" />
+    <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/css/coordenador.css"/>
 </head>
 <body>
     <header class="header">
@@ -16,12 +17,20 @@
 
                 @if (User.IsInRole("Coordenador"))
                 {
-                    <li><a asp-controller="Evento" asp-action="Index">Painel Admin</a></li>
+                    <li><a asp-controller="Evento" asp-action="Index">Painel Eventos</a></li>
+                    <li><a asp-controller="Acesso" asp-action="GerenciarAtletas">Gerenciar Permissões</a></li>
                 }
 
                 @if (User.IsInRole("Arbitro"))
                 {
                     <li><a asp-controller="Jogo" asp-action="MinhasPartidas">Área do Árbitro</a></li>
+                    <li>
+                        <a class="dropdown-item fw-bold" asp-controller="Evento" asp-action="PainelArbitro">🏆 Gestão do Torneio</a>
+                    </li>
+                }
+                @if (User.IsInRole("Tecnico"))
+                {
+                    <li><a asp-controller="Equipe" asp-action="MinhasEquipes">Gerenciar Equipes</a></li>
                 }
 
                 @if (User.Identity.IsAuthenticated)

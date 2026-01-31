@@ -4,6 +4,7 @@ using Jogos_Academicos.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jogos_Academicos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131170018_AdicionarFasesTorneio")]
+    partial class AdicionarFasesTorneio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,7 +285,7 @@ namespace Jogos_Academicos.Migrations
                     b.Property<bool>("Finalizado")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("GrupoId")
+                    b.Property<int>("GrupoId")
                         .HasColumnType("int");
 
                     b.Property<int>("NumeroRodada")
@@ -507,15 +510,16 @@ namespace Jogos_Academicos.Migrations
                         .IsRequired();
 
                     b.HasOne("Jogos_Academicos.Models.Evento", "Evento")
-                        .WithMany("Jogos")
+                        .WithMany()
                         .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Jogos_Academicos.Models.Grupo", "Grupo")
                         .WithMany("Jogos")
                         .HasForeignKey("GrupoId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Arbitro");
 
@@ -560,8 +564,6 @@ namespace Jogos_Academicos.Migrations
             modelBuilder.Entity("Jogos_Academicos.Models.Evento", b =>
                 {
                     b.Navigation("Grupos");
-
-                    b.Navigation("Jogos");
                 });
 
             modelBuilder.Entity("Jogos_Academicos.Models.Grupo", b =>

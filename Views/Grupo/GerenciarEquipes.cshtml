@@ -1,0 +1,45 @@
+﻿@model Jogos_Academicos.Models.Grupo
+
+@{
+    ViewData["Title"] = "Gerenciar Equipes";
+}
+
+<div class="container" style="padding: 20px;">
+    <h2 style="color: #6d28d9;">Gerenciar Equipes - @Model.Nome</h2>
+    <h5 class="text-muted">Evento: @Model.Evento?.Nome (@Model.Evento?.Esporte?.Nome)</h5>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="GerenciarEquipes" method="post">
+                <input type="hidden" name="grupoId" value="@Model.Id" />
+
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Selecione as equipes que farão parte deste grupo.
+                    A lista exibe apenas equipes da modalidade <strong>@Model.Evento?.Esporte?.Nome</strong> que não estão em outros grupos.
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="control-label fw-bold mb-2">Equipes Disponíveis</label>
+
+                    <select name="equipesIds" class="form-control" asp-items="ViewBag.Equipes" multiple style="min-height: 200px;">
+                    </select>
+
+                    <small class="text-muted d-block mt-2">
+                        Dica: Segure a tecla <strong>Ctrl</strong> (ou Command no Mac) para selecionar múltiplas equipes.
+                    </small>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success fw-bold">
+                        <i class="bi bi-save"></i> Salvar e Concluir
+                    </button>
+
+                    <a asp-controller="Evento" asp-action="Index" class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

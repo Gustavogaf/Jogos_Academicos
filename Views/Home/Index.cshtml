@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Jogos_Academicos.Models.Evento>
+@using Jogos_Academicos.Models.Enums
 
 @{
     ViewData["Title"] = "Início";
@@ -28,6 +29,8 @@
         background: white;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
     }
 
         .card-evento:hover {
@@ -35,16 +38,24 @@
             border-color: #6d28d9;
         }
 
-    .btn-ver {
+    .btn-matamata {
         display: block;
         margin-top: 15px;
         text-align: center;
-        background-color: #6d28d9;
-        color: white;
-        padding: 10px;
+        background-color: #fff;
+        color: #dc3545; /* Vermelho para destaque */
+        padding: 8px;
+        border: 1px solid #dc3545;
         border-radius: 5px;
         text-decoration: none;
+        font-weight: bold;
+        transition: all 0.2s;
     }
+
+        .btn-matamata:hover {
+            background-color: #dc3545;
+            color: white;
+        }
 </style>
 
 <div class="hero-section">
@@ -66,11 +77,24 @@
             <hr style="margin: 10px 0; border-color: #eee;">
 
             <p style="font-size: 0.9em; color: #666;">Grupos:</p>
-            @foreach (var grupo in evento.Grupos)
+
+            <div style="flex-grow: 1;">
+                @if (evento.Grupos != null)
+                {
+                    @foreach (var grupo in evento.Grupos)
+                    {
+                        <a asp-controller="Grupo" asp-action="Detalhes" asp-route-id="@grupo.Id"
+                           style="color: #6d28d9; display: block; margin-bottom: 5px; font-weight: bold; text-decoration: none;">
+                            ➜ Ver Classificação @grupo.Nome
+                        </a>
+                    }
+                }
+            </div>
+
+            @if (evento.Jogos != null && evento.Jogos.Any(j => j.Fase != FaseTorneio.Grupos))
             {
-                <a asp-controller="Grupo" asp-action="Detalhes" asp-route-id="@grupo.Id"
-                   style="color: #6d28d9; display: block; margin-bottom: 5px; font-weight: bold;">
-                    ➜ Ver Classificação @grupo.Nome
+                <a asp-controller="Evento" asp-action="VisualizarMataMata" asp-route-id="@evento.Id" class="btn-matamata">
+                    🏆 Ver Fase Final (Mata-Mata)
                 </a>
             }
         </div>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Jogos_Academicos.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Gerenciar Atletas";
+}
+
+<div class="container" style="padding: 20px;">
+    <h2 style="color: #6d28d9; margin-bottom: 20px;">Promoção de Usuários</h2>
+
+    <div class="alert alert-info">
+        <p>
+            <strong>Como funciona:</strong> Aqui você vê todos os usuários cadastrados como "Atleta".
+            Para definir um <strong>Técnico</strong>, encontre o usuário na lista e clique em "Promover".
+        </p>
+        <p><em>Nota: Árbitros já devem constar no banco de dados e não aparecem nesta lista.</em></p>
+    </div>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success">@TempData["Sucesso"]</div>
+    }
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Erro"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p>Nenhum atleta encontrado no sistema.</p>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead style="background-color: #f8f9fa;">
+                <tr>
+                    <th>Nome</th>
+                    <th>Matrícula</th>
+                    <th>Curso</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.NomeCompleto</strong><br />
+                            <small style="color: #666;">@item.Email</small>
+                        </td>
+                        <td>@item.Matricula</td>
+                        <td>@item.Curso?.Nome</td>
+                        <td>
+                            <form asp-action="PromoverParaTecnico" method="post" onsubmit="return confirm('Tem certeza que deseja tornar @item.NomeCompleto um Técnico?');">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary" style="border-color: #6d28d9; color: #6d28d9;">
+                                    ⬆ Tornar Técnico
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <a asp-controller="Evento" asp-action="Index" style="margin-top: 20px; display: inline-block;">Voltar ao Painel</a>
+</div>
