@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Jogos_Academicos.Models.Jogo>
+
+@{
+    ViewData["Title"] = "Área do Árbitro";
+}
+
+<link rel="stylesheet" href="~/css/arbitro.css">
+
+<div class="container-arbitro">
+    <h2>Jogos Pendentes de Arbitragem</h2>
+
+    @if (!Model.Any())
+    {
+        <p>Você não tem jogos pendentes para apitar no momento.</p>
+    }
+    else
+    {
+        <div class="lista-jogos">
+            @foreach (var jogo in Model)
+            {
+                <div class="card-jogo">
+                    <div class="info-jogo">
+                        <span>@jogo.Evento.Nome</span>
+                        <br />
+                        <small>@jogo.DataHora.ToString("dd/MM HH:mm")</small>
+                    </div>
+
+                    <form asp-action="RegistrarResultado" method="post" class="form-placar">
+                        <input type="hidden" name="JogoId" value="@jogo.Id" />
+
+                        <div class="confronto">
+                            <span class="time-nome">@jogo.EquipeA.Nome</span>
+
+                            <input type="number" name="PlacarA" class="input-placar" min="0" placeholder="0" />
+                            <span class="x">X</span>
+                            <input type="number" name="PlacarB" class="input-placar" min="0" placeholder="0" />
+
+                            <span class="time-nome">@jogo.EquipeB.Nome</span>
+                        </div>
+
+                        <div class="opcoes-wo">
+                            <label><input type="checkbox" name="WoA" value="true" /> WO (Venc. A)</label>
+                            <label><input type="checkbox" name="WoB" value="true" /> WO (Venc. B)</label>
+                        </div>
+
+                        <button type="submit" class="btn-confirmar">Encerrar Partida</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

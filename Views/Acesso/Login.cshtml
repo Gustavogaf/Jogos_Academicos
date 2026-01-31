@@ -1,0 +1,64 @@
+﻿@model Jogos_Academicos.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login - Sistema Acadêmico";
+    Layout = null; // Login geralmente não usa o menu padrão (_Layout)
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/login.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container-login">
+        <div class="img-box">
+            <img src="~/img/img-login.svg" alt="Ilustração Login">
+        </div>
+        <div class="content-box">
+            <div class="form-box">
+                <h2>Login</h2>
+
+                @if (ViewBag.Erro != null)
+                {
+                    <div style="color: red; margin-bottom: 10px; text-align: center;">
+                        @ViewBag.Erro
+                    </div>
+                }
+
+                <form asp-controller="Acesso" asp-action="Login" method="post">
+
+                    <div class="input-box">
+                        <label asp-for="Email">Email</label>
+                        <input asp-for="Email" type="email" placeholder="Digite seu email">
+                        <span asp-validation-for="Email" style="color:red; font-size: 0.8em;"></span>
+                    </div>
+
+                    <div class="input-box">
+                        <label asp-for="Senha">Senha</label>
+                        <input asp-for="Senha" type="password" placeholder="Digite sua senha">
+                        <span asp-validation-for="Senha" style="color:red; font-size: 0.8em;"></span>
+                    </div>
+
+                    <div class="remember">
+                        <label><input type="checkbox"> Lembrar de mim</label>
+                        <a href="#">Esqueceu a Senha?</a>
+                    </div>
+
+                    <div class="input-box">
+                        <input type="submit" value="Entrar">
+                    </div>
+
+                    <div class="input-box">
+                        <p>Não tem uma conta? <a asp-controller="Acesso" asp-action="Cadastro">Cadastre-se</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

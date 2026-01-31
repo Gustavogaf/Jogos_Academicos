@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+}
+th, 
+td{
+    width: 100px;
+    border: 2px solid grey;
+}
+table{
+    border-collapse: collapse;
+    text-align: center;
+}

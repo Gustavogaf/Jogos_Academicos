@@ -1,0 +1,166 @@
+/* Importa a fonte Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --background-dark: #2C2C4A;
+    --card-background: #1A1A2E;
+    --text-light: white;
+    --text-medium: rgb(198, 187, 187);
+    --primary-color: #7B68EE; 
+    --primary-color-dark: #5F4B8B; 
+    --accent-color: #4CAF50; 
+    --border-color: #5A5A8C; 
+    --input-background: white; 
+    --disabled-background: #4A4A7A; 
+    --shadow-color-dark: rgba(0, 0, 0, 0.5);
+    --shadow-color-light: rgba(0, 0, 0, 0.2);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--background-dark) 0%, #121226 100%);
+    color: var(--text-light); 
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--card-background);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px var(--shadow-color-dark);
+    animation: fadeIn 0.7s ease-out forwards;
+    border: 1px solid var(--border-color); 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cadastro-form h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: white; 
+    font-size: 1.8em;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-shadow: 1px 1px 3px var(--shadow-color-light);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--input-background); 
+    color: #333333;
+    font-size: 0.9em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder {
+    color: var(--text-medium); 
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.4);
+    background-color: #F8F8F8;
+    outline: none;
+}
+
+.form-group input:disabled {
+    background-color: var(--disabled-background);
+    cursor: not-allowed;
+    opacity: 0.8;
+    color: var(--text-medium); 
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8em;
+    color: var(--text-medium);
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-color-dark));
+    border: none;
+    border-radius: 6px;
+    color: #FFFFFF; /* Texto do botão em branco puro */
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px var(--shadow-color-dark);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(45deg, var(--primary-color-hover), var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px var(--shadow-color-dark);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px var(--shadow-color-light);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+        border-radius: 8px;
+    }
+    .cadastro-form h1 {
+        font-size: 1.6em;
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        font-size: 0.85em;
+    }
+    .form-group input,
+    .form-group select,
+    button[type="submit"] {
+        font-size: 0.8em;
+        padding: 8px;
+    }
+    button[type="submit"] {
+        padding: 10px;
+    }
+}

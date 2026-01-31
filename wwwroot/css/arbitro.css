@@ -1,0 +1,320 @@
+body {
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    background-color: #f3f4f6; /* bg-gray-100 */
+    padding: 1rem; /* p-4 */
+    min-height: 100vh; /* min-h-screen */
+    display: flex; /* flex */
+    align-items: center; /* items-center */
+    justify-content: center; /* justify-center */
+}
+
+.container {
+    max-width: 1200px; /* Aumentado para acomodar a tabela */
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.main-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.main-header h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.main-header p {
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.message-box {
+    display: none;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.message-box.success {
+    background-color: #d1fae5; /* green-100 */
+    color: #065f46; /* green-800 */
+    border: 1px solid #34d399; /* green-400 */
+}
+
+.message-box.error {
+    background-color: #fee2e2; /* red-100 */
+    color: #991b1b; /* red-800 */
+    border: 1px solid #f87171; /* red-400 */
+}
+
+.card {
+    background-color: #fff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.75rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    color: #4a5568; /* gray-700 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 700; /* font-bold */
+    margin-bottom: 0.5rem;
+}
+
+.form-select,
+.form-input {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow */
+    appearance: none;
+    border-width: 1px; /* border */
+    border-color: #e2e8f0; /* border-gray-300 */
+    border-radius: 0.25rem; /* rounded */
+    width: 100%; /* w-full */
+    padding-top: 0.5rem; /* py-2 */
+    padding-bottom: 0.5rem; /* py-2 */
+    padding-left: 0.75rem; /* px-3 */
+    padding-right: 0.75rem; /* px-3 */
+    color: #4a5568; /* text-gray-700 */
+    line-height: 1.25; /* leading-tight */
+    outline: none; /* focus:outline-none */
+}
+
+.form-select:focus,
+.form-input:focus {
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* focus:shadow-outline */
+}
+
+/* Estilos dos botões para replicar o estilo existente */
+.btn {
+    font-weight: 700;
+    padding: 0.6rem 1.2rem; /* Aumentado o padding para um visual mais bonito */
+    border-radius: 0.5rem; /* Bordas mais arredondadas */
+    outline: none;
+    border: none; /* Removido a borda padrão */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
+    color: #fff;
+    margin-top: 0.8rem; /* Ajustado a margem superior */
+    width: auto;
+    display: inline-block;
+    margin-right: 0.8rem; /* Espaçamento entre os botões */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; /* Transição mais suave */
+    text-align: center;
+    position: relative; /* Para efeitos de pseudo-elementos */
+    overflow: hidden; /* Para garantir que os efeitos não transbordem */
+}
+
+.btn:hover {
+    transform: translateY(-2px); /* Efeito de "levantar" no hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Sombra maior no hover */
+}
+
+/* Efeito de brilho no hover */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transition: all 0.6s ease-in-out;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+}
+
+.btn:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+
+.btn-green {
+    background-color: #48bb78; /* green-500 */
+}
+.btn-green:hover {
+    background-color: #38a169; /* green-600 */
+}
+
+.btn-blue {
+    background-color: #4299e1; /* blue-500 */
+}
+.btn-blue:hover {
+    background-color: #3182ce; /* blue-600 */
+}
+
+.btn-gray {
+    background-color: #a0aec0; /* gray-500 */
+}
+.btn-gray:hover {
+    background-color: #718096; /* gray-600 */
+}
+
+.btn-red {
+    background-color: #ef4444; /* red-500 */
+}
+.btn-red:hover {
+    background-color: #dc2626; /* red-600 */
+}
+
+.btn-purple {
+    background-color: #9f7aea; /* purple-500 */
+}
+.btn-purple:hover {
+    background-color: #805ad5; /* purple-600 */
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 1.5rem 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
+
+.leading-tight {
+    line-height: 1.25;
+}
+
+.text-support {
+    font-size: 0.875rem; /* text-sm */
+    color: #718096; /* text-gray-600 */
+    margin-bottom: 1rem;
+}
+
+/* Estilos para a tabela de jogos */
+.game-table-wrapper {
+    overflow-x: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+}
+
+.game-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.game-table th,
+.game-table td {
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    font-size: 0.875rem;
+    color: #4a5568;
+}
+
+.game-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+}
+
+.game-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.game-table .table-message,
+.game-table .table-error {
+    text-align: center;
+    font-style: italic;
+    color: #718096;
+}
+
+.game-table .table-error {
+    color: #ef4444;
+}
+
+.info-details {
+    background-color: #e0f2fe; /* blue-50 */
+    border-left: 4px solid #3b82f6; /* blue-500 */
+    padding: 1rem;
+    margin-top: 1rem;
+    font-family: monospace;
+    white-space: pre-wrap;
+    color: #1e40af; /* blue-800 */
+    display: none; /* Escondido por padrão */
+    border-radius: 0.25rem;
+}
+
+/* Estilo para a tabela ocupar toda a largura e ter espaçamento */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse; /* Para remover espaçamento entre as células */
+    margin-top: 1rem; /* Espaçamento superior */
+    margin-bottom: 1rem; /* Espaçamento inferior */
+    border-radius: 0.25rem; /* Bordas arredondadas para a tabela */
+    overflow: hidden; /* Garante que as bordas arredondadas sejam visíveis */
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); /* Sombra leve */
+}
+
+/* Melhorar o espaçamento e alinhamento dos cabeçalhos da tabela */
+.custom-th {
+    padding: 12px 15px; /* Mais padding para espaçamento */
+    text-align: left;
+    background-color: #e2e8f0; /* Cor de fundo para cabeçalhos (light gray) */
+    border-bottom: 2px solid #cbd5e0; /* Linha inferior mais destacada */
+    font-size: 0.9em;
+    color: #2d3748; /* Cor de texto mais escura */
+    font-weight: 600; /* Mais negrito */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap; /* Impede que o texto do cabeçalho quebre a linha */
+}
+
+/* Melhorar o espaçamento e alinhamento das células da tabela */
+.custom-td {
+    padding: 10px 15px; /* Mais padding para espaçamento */
+    text-align: left;
+    border-bottom: 1px solid #edf2f7; /* Linha inferior mais suave */
+    font-size: 0.85em;
+    color: #4a5568; /* Cor de texto padrão */
+    white-space: nowrap; /* Impede que o texto da célula quebre a linha */
+}
+
+/* Estilo para linhas pares e ímpares (opcional, para legibilidade) */
+.custom-tbody tr:nth-child(even) {
+    background-color: #f7fafc; /* light-light gray */
+}
+
+.custom-tbody tr:hover {
+    background-color: #ebf4ff; /* Efeito hover nas linhas (light blue) */
+}

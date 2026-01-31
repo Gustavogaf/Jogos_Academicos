@@ -1,0 +1,47 @@
+﻿@model Jogos_Academicos.Models.Evento
+
+@{
+    ViewData["Title"] = "Novo Evento";
+}
+
+<link rel="stylesheet" href="~/css/cadastro.css">
+<div class="container">
+    <div class="form-box">
+        <h2>Criar Novo Evento</h2>
+
+        <form asp-action="Criar">
+            <div class="input-box">
+                <label asp-for="Nome">Nome do Evento</label>
+                <input asp-for="Nome" class="input-padrao" placeholder="Ex: Interclasse 2025" />
+                <span asp-validation-for="Nome" style="color:red"></span>
+            </div>
+
+            <div class="input-box">
+                <label asp-for="Data">Data de Início</label>
+                <input asp-for="Data" type="date" class="input-padrao" />
+                <span asp-validation-for="Data" style="color:red"></span>
+            </div>
+
+            <div class="input-box">
+                <label asp-for="EsporteId">Modalidade</label>
+                <select asp-for="EsporteId" class="input-padrao"
+                        asp-items="@(new SelectList(ViewBag.Esportes, "Id", "Nome"))">
+                    <option value="">Selecione...</option>
+                </select>
+            </div>
+
+            <div class="input-box">
+                <label asp-for="Nivel">Nível</label>
+                <select asp-for="Nivel" class="input-padrao" asp-items="Html.GetEnumSelectList<Jogos_Academicos.Models.Enums.Grau>()"></select>
+            </div>
+
+            <div class="input-box">
+                <button type="submit" class="btn-submit">Salvar Evento</button>
+            </div>
+
+            <div class="input-box">
+                <a asp-action="Index">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
