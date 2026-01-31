@@ -9,18 +9,18 @@
 
     @if (TempData["Sucesso"] != null)
     {
-        <div style="color: green; font-weight: bold; margin-bottom: 15px;">@TempData["Sucesso"]</div>
+        <div class="alert alert-success">@TempData["Sucesso"]</div>
     }
     @if (TempData["Erro"] != null)
     {
-        <div style="color: red; font-weight: bold; margin-bottom: 15px;">@TempData["Erro"]</div>
+        <div class="alert alert-danger">@TempData["Erro"]</div>
     }
 
     <h3 style="margin-top: 20px;">Classificação</h3>
 
     @if (ViewBag.Classificacao != null)
     {
-        <table class="table" style="width: 100%; border-collapse: collapse; margin-bottom: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <table class="table table-hover" style="margin-bottom: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
             <thead style="background-color: #6d28d9; color: white;">
                 <tr>
                     <th style="padding: 10px;">Pos</th>
@@ -40,16 +40,15 @@
                 @foreach (var time in (IEnumerable<Jogos_Academicos.Models.ClassificacaoGrupo>)ViewBag.Classificacao)
                 {
                     int jogosJogados = time.Vitorias + time.Empates + time.Derrotas;
-
-                    <tr style="border-bottom: 1px solid #ddd; background-color: white;">
-                        <td style="padding: 10px; text-align: center; font-weight: bold;">@posicao</td>
-                        <td style="padding: 10px;">@time.Equipe.Nome</td>
-                        <td style="padding: 10px; text-align: center; font-weight: bold; color: #6d28d9;">@time.Pontos</td>
-                        <td style="padding: 10px; text-align: center;">@jogosJogados</td>
-                        <td style="padding: 10px; text-align: center;">@time.Vitorias</td>
-                        <td style="padding: 10px; text-align: center;">@time.Empates</td>
-                        <td style="padding: 10px; text-align: center;">@time.Derrotas</td>
-                        <td style="padding: 10px; text-align: center;">@time.SaldoGols</td>
+                    <tr>
+                        <td style="text-align: center; font-weight: bold;">@posicao</td>
+                        <td>@time.Equipe.Nome</td>
+                        <td style="text-align: center; font-weight: bold; color: #6d28d9;">@time.Pontos</td>
+                        <td style="text-align: center;">@jogosJogados</td>
+                        <td style="text-align: center;">@time.Vitorias</td>
+                        <td style="text-align: center;">@time.Empates</td>
+                        <td style="text-align: center;">@time.Derrotas</td>
+                        <td style="text-align: center;">@time.SaldoGols</td>
                     </tr>
                     posicao++;
                 }
@@ -58,18 +57,35 @@
     }
     else
     {
-        <p>A classificação será gerada após o primeiro jogo.</p>
+        <p class="text-muted">A classificação será gerada após o primeiro jogo.</p>
     }
 
     <hr />
 
-    <h3>Equipes Participantes</h3>
-    <ul>
-        @foreach (var equipe in Model.Equipes)
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3>Equipes Participantes</h3>
+
+        @if (User.IsInRole("Coordenador"))
         {
-            <li>@equipe.Nome</li>
+            <a asp-action="GerenciarEquipes" asp-route-grupoId="@Model.Id" class="btn btn-sm btn-outline-primary" style="border-color: #6d28d9; color: #6d28d9;">
+                ⚙️ Gerenciar Equipes
+            </a>
         }
-    </ul>
+    </div>
+
+    @if (Model.Equipes != null && Model.Equipes.Any())
+    {
+        <ul>
+            @foreach (var equipe in Model.Equipes)
+            {
+                <li>@equipe.Nome</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="text-muted">Nenhuma equipe adicionada a este grupo ainda.</p>
+    }
 
     <hr />
 
@@ -77,61 +93,76 @@
 
     @if (!Model.Jogos.Any())
     {
-        <p>Nenhum jogo gerado ainda.</p>
+        <div class="alert alert-secondary">
+            Nenhum jogo gerado ainda.
+        </div>
 
-        @if (User.IsInRole("Coordenador"))
+        @if (User.IsInRole("Arbitro"))
         {
-            <form asp-action="GerarJogos" method="post">
-                <input type="hidden" name="grupoId" value="@Model.Id" />
-                <button type="submit" class="btn btn-primary" style="background-color: #6d28d9; color: white; padding: 10px; border: none; cursor: pointer;">
-                    Gerar Tabela de Jogos (Round Robin)
-                </button>
-            </form>
+            <div class="alert alert-info">
+                Para gerar a tabela de jogos deste evento, acesse o
+                <a asp-controller="Evento" asp-action="PainelArbitro" class="alert-link">Painel de Gestão do Torneio</a>.
+            </div>
         }
         else
         {
-            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 5px solid #6d28d9;">
-                <p style="margin: 0; color: #555;">
-                    <em>A tabela de jogos ainda não foi definida pela coordenação. Aguarde novidades!</em>
-                </p>
-            </div>
+            <p class="text-muted">Aguardando o Árbitro gerar a tabela de jogos.</p>
         }
     }
     else
     {
-        <table class="table" border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <table class="table table-bordered table-striped" style="margin-top: 10px;">
             <thead>
-                <tr style="background-color: #f0f0f0;">
+                <tr>
                     <th>Data</th>
                     <th>Time A</th>
-                    <th>Placar</th>
+                    <th class="text-center">Placar</th>
                     <th>Time B</th>
+                    <th>Fase</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var jogo in Model.Jogos.OrderBy(j => j.DataHora))
                 {
                     <tr>
-                        <td style="padding: 8px;">@jogo.DataHora.ToString("dd/MM/yyyy")</td>
-                        <td style="padding: 8px;">@jogo.EquipeA.Nome</td>
-                        <td style="padding: 8px; text-align: center;">
+                        <td>@jogo.DataHora.ToString("dd/MM/yyyy")</td>
+                        <td class="text-end">@jogo.EquipeA.Nome</td>
+                        <td class="text-center fw-bold">
                             @(jogo.Finalizado ? $"{jogo.PlacarA} x {jogo.PlacarB}" : "vs")
+                            @if (jogo.WoA)
+                            {
+                                <span class="badge bg-danger">W.O.</span>
+                            }
+                            @if (jogo.WoB)
+                            {
+                                <span class="badge bg-danger">W.O.</span>
+                            }
                         </td>
-                        <td style="padding: 8px;">@jogo.EquipeB.Nome</td>
+                        <td>@jogo.EquipeB.Nome</td>
+                        <td>
+                            @if (jogo.Fase == Jogos_Academicos.Models.Enums.FaseTorneio.Grupos)
+                            {
+                                <span class="badge bg-info text-dark">Fase de Grupos</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Mata-Mata</span>
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
 
-    <div style="margin-top: 20px;">
+    <div style="margin-top: 30px;">
         @if (User.IsInRole("Coordenador"))
         {
-            <a asp-controller="Evento" asp-action="Index">Voltar para Eventos</a>
+            <a asp-controller="Evento" asp-action="Index" class="btn btn-outline-secondary">← Voltar para Eventos</a>
         }
         else
         {
-            <a asp-controller="Home" asp-action="Index">Voltar para Início</a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">← Voltar para Início</a>
         }
     </div>
 </div>

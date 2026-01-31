@@ -27,6 +27,7 @@ namespace Jogos_Academicos.Controllers
             var eventos = await _context.Eventos
                 .Include(e => e.Esporte)
                 .Include(e => e.Grupos)
+                .Include(e => e.Jogos)
                 .OrderByDescending(e => e.Data)
                 .ToListAsync();
 

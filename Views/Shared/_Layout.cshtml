@@ -24,6 +24,9 @@
                 @if (User.IsInRole("Arbitro"))
                 {
                     <li><a asp-controller="Jogo" asp-action="MinhasPartidas">Área do Árbitro</a></li>
+                    <li>
+                        <a class="dropdown-item fw-bold" asp-controller="Evento" asp-action="PainelArbitro">🏆 Gestão do Torneio</a>
+                    </li>
                 }
                 @if (User.IsInRole("Tecnico"))
                 {

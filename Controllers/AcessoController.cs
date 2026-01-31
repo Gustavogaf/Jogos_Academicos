@@ -1,7 +1,6 @@
 ﻿using Jogos_Academicos.Data;
 using Jogos_Academicos.Models;
 using Jogos_Academicos.Models.enums;
-using Jogos_Academicos.Models.Enums; // Para acessar o Enum Role
 using Jogos_Academicos.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization; // Importante para [Authorize]

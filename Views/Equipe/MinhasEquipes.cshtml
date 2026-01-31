@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Jogos_Academicos.Models.Equipe>
+﻿@* Arquivo: Views/Equipe/MinhasEquipes.cshtml *@
+@model IEnumerable<Jogos_Academicos.Models.Equipe>
 
 @{
     ViewData["Title"] = "Minhas Equipes";
@@ -29,7 +30,7 @@
                     <th>Nome da Equipe</th>
                     <th>Modalidade</th>
                     <th>Curso</th>
-                    <th>Status</th>
+                    <th>Atletas</th> @* Nova Coluna *@
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +40,23 @@
                         <td style="font-weight: bold;">@item.Nome</td>
                         <td>@item.Esporte?.Nome</td>
                         <td>@item.Curso?.Nome</td>
-                        <td><span class="badge bg-success">Ativa</span></td>
+
+                        @* Coluna de Atletas *@
+                        <td>
+                            @if (item.Atletas != null && item.Atletas.Any())
+                            {
+                                <ul style="padding-left: 15px; margin-bottom: 0; font-size: 0.9em;">
+                                    @foreach (var atleta in item.Atletas)
+                                    {
+                                        <li>@atleta.NomeCompleto</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Nenhum atleta</span>
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>

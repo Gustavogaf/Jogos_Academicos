@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Jogos_Academicos.Data;
+using Jogos_Academicos.Models;
+using Jogos_Academicos.Models.enums;
+using Jogos_Academicos.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using Jogos_Academicos.Data;
-using Jogos_Academicos.Models;
-using Jogos_Academicos.Models.enums; // Ajuste o namespace se necessário
 
 namespace Jogos_Academicos.Controllers
 {
-    [Authorize(Roles = "Tecnico")] // Apenas Técnicos acessam esta área
+    [Authorize(Roles = "Tecnico")]
     public class EquipeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,16 +23,15 @@ namespace Jogos_Academicos.Controllers
         // GET: Equipe/MinhasEquipes
         public async Task<IActionResult> MinhasEquipes()
         {
-            // Obtém o ID do usuário logado
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdStr)) return Forbid();
 
             int userId = int.Parse(userIdStr);
 
-            // Busca as equipes onde o Técnico é o usuário logado
             var equipes = await _context.Equipes
                 .Include(e => e.Esporte)
                 .Include(e => e.Curso)
+                .Include(e => e.Atletas) // <--- ADICIONE ESTA LINHA
                 .Where(e => e.TecnicoId == userId)
                 .ToListAsync();
 
@@ -39,43 +39,92 @@ namespace Jogos_Academicos.Controllers
         }
 
         // GET: Equipe/Criar
-        public IActionResult Criar()
+        public async Task<IActionResult> Criar()
         {
-            // Carrega os dropdowns de Esportes e Cursos
-            ViewData["EsporteId"] = new SelectList(_context.Esportes, "Id", "Nome");
-            ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Nome");
+            var tecnicoId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // 1. Busca os dados do Técnico para saber o Curso dele
+            var tecnico = await _context.Usuarios
+                .Include(u => u.Curso)
+                .FirstOrDefaultAsync(u => u.Id == tecnicoId);
+
+            if (tecnico?.CursoId == null)
+            {
+                // Regra de segurança: Técnico sem curso não cria equipe
+                TempData["Erro"] = "Você precisa estar vinculado a um curso para criar equipes.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // 2. Carrega apenas Atletas do MESMO curso do Técnico
+            var atletasDisponiveis = await _context.Usuarios
+                .Where(u => u.CursoId == tecnico.CursoId && u.TipoUsuario == Role.Atleta)
+                .OrderBy(u => u.NomeCompleto)
+                .ToListAsync();
+
+            // 3. Prepara a View
+            // Passamos o nome do curso para exibir (campo readonly)
+            ViewBag.NomeCurso = tecnico.Curso.Nome;
+
+            // MultiSelectList permite selecionar vários atletas
+            ViewBag.Atletas = new MultiSelectList(atletasDisponiveis, "Id", "NomeCompleto");
+
+            // Dropdown de esportes continua normal
+            ViewBag.EsporteId = new SelectList(_context.Esportes, "Id", "Nome");
+
             return View();
         }
 
         // POST: Equipe/Criar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Criar(Equipe equipe)
+        // Recebemos 'atletasIds' do <select multiple>
+        public async Task<IActionResult> Criar(Equipe equipe, List<int> atletasIds)
         {
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdStr)) return Forbid();
+            var tecnicoId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            // Vincula a equipe ao Técnico logado
-            equipe.TecnicoId = int.Parse(userIdStr);
+            // Busca o técnico novamente para garantir a segurança do CursoId
+            var tecnico = await _context.Usuarios.FindAsync(tecnicoId);
 
-            // Remove validações de propriedades de navegação
+            // REGRA: Curso da equipe = Curso do Técnico (Ignora o que vier da View se houver manipulação)
+            equipe.CursoId = tecnico.CursoId;
+            equipe.TecnicoId = tecnicoId;
+
+            // REGRA: Adicionar os Atletas selecionados
+            if (atletasIds != null && atletasIds.Any())
+            {
+                // Busca os usuários no banco
+                var atletasParaAdicionar = await _context.Usuarios
+                    .Where(u => atletasIds.Contains(u.Id))
+                    .ToListAsync();
+
+                equipe.Atletas = atletasParaAdicionar;
+            }
+
+            // Remove validações que não vêm do formulário
             ModelState.Remove("Tecnico");
             ModelState.Remove("Esporte");
             ModelState.Remove("Curso");
-            ModelState.Remove("Atletas");
             ModelState.Remove("Grupos");
+            ModelState.Remove("Atletas");
 
             if (ModelState.IsValid)
             {
                 _context.Add(equipe);
-                await _context.SaveChangesAsync();
-                TempData["Sucesso"] = "Equipe cadastrada com sucesso!";
+                await _context.SaveChangesAsync(); // O EF Core salva a tabela 'equipe_atleta' automaticamente aqui
+
+                TempData["Sucesso"] = "Equipe criada com sucesso!";
                 return RedirectToAction(nameof(MinhasEquipes));
             }
 
-            // Se falhar, recarrega os dropdowns
-            ViewData["EsporteId"] = new SelectList(_context.Esportes, "Id", "Nome", equipe.EsporteId);
-            ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Nome", equipe.CursoId);
+            // Se der erro (ex: nome vazio), recarrega as listas para não quebrar a tela
+            var atletasDisponiveis = await _context.Usuarios
+                .Where(u => u.CursoId == tecnico.CursoId && u.TipoUsuario == Role.Atleta)
+                .ToListAsync();
+
+            ViewBag.NomeCurso = _context.Cursos.Find(tecnico.CursoId)?.Nome;
+            ViewBag.Atletas = new MultiSelectList(atletasDisponiveis, "Id", "NomeCompleto", atletasIds);
+            ViewBag.EsporteId = new SelectList(_context.Esportes, "Id", "Nome", equipe.EsporteId);
+
             return View(equipe);
         }
     }

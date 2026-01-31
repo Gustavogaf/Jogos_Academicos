@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Jogos_Academicos.Models.Enums; // Se Fase for um Enum
+using Jogos_Academicos.Models.Enums;
 
 namespace Jogos_Academicos.Models
 {
@@ -20,7 +20,11 @@ namespace Jogos_Academicos.Models
 
         public DateTime DataHora { get; set; }
 
-        // Relacionamentos
+        public FaseTorneio Fase { get; set; }
+        public int NumeroRodada { get; set; }
+
+        // --- RELACIONAMENTOS ---
+
         public int ArbitroId { get; set; }
         [ForeignKey("ArbitroId")]
         public virtual Usuario Arbitro { get; set; }
@@ -33,10 +37,15 @@ namespace Jogos_Academicos.Models
         [ForeignKey("EquipeBId")]
         public virtual Equipe EquipeB { get; set; }
 
-        public int GrupoId { get; set; }
+        // Grupo é Opcional (Nullable)
+        public int? GrupoId { get; set; }
+        [ForeignKey("GrupoId")] // Adicionei esta anotação para garantir
         public virtual Grupo Grupo { get; set; }
 
+        // CORREÇÃO PRINCIPAL AQUI:
         public int EventoId { get; set; }
+
+        [ForeignKey("EventoId")] // <--- ESTA ANOTAÇÃO CORRIGE O ERRO 'EventoId1'
         public virtual Evento Evento { get; set; }
     }
 }

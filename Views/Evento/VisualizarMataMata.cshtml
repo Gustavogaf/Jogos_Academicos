@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Jogos_Academicos.Models.Jogo>
+@using Jogos_Academicos.Models.Enums
+
+@{
+    ViewData["Title"] = "Fase Final";
+    // Agrupa os jogos por fase para exibir separado
+    var jogosPorFase = Model.GroupBy(j => j.Fase).OrderBy(g => (int)g.Key);
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-danger">🏆 Fase Final - @ViewBag.EventoNome</h2>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">
+            A fase de mata-mata ainda não foi gerada para este evento.
+        </div>
+    }
+    else
+    {
+        @foreach (var grupoFase in jogosPorFase)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="m-0">
+                        @switch (grupoFase.Key)
+                        {
+                            case FaseTorneio.Final:
+                                <text>Grande Final</text>
+                                ; break;
+                            case FaseTorneio.SemiFinal:
+
+                                <text>Semi-Finais</text>
+                                ; break;
+                            case FaseTorneio.QuartasFinal:
+
+                                <text>Quartas de Final</text>
+                                ; break;
+                            case FaseTorneio.OitavasFinal:
+
+                                <text>Oitavas de Final</text>
+                                ; break;
+                            default:
+
+                                @grupoFase.Key.ToString()
+                                ; break;
+                        }
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var jogo in grupoFase)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <div class="border rounded p-3 text-center bg-light">
+                                    <small class="text-muted d-block mb-2">@jogo.DataHora.ToString("dd/MM HH:mm")</small>
+
+                                    <div class="d-flex justify-content-center align-items-center gap-3">
+                                        <div class="fw-bold @(jogo.PlacarA > jogo.PlacarB ? "text-success" : "")">
+                                            @jogo.EquipeA?.Nome
+                                        </div>
+
+                                        <div class="bg-dark text-white px-3 py-1 rounded fw-bold">
+                                            @if (jogo.Finalizado)
+                                            {
+                                                <span>@jogo.PlacarA</span>
+                                                <span class="mx-1">x</span>
+
+                                                <span>@jogo.PlacarB</span>
+                                            }
+                                            else
+                                            {
+                                                <span>vs</span>
+                                            }
+                                        </div>
+
+                                        <div class="fw-bold @(jogo.PlacarB > jogo.PlacarA ? "text-success" : "")">
+                                            @(jogo.EquipeB != null ? jogo.EquipeB.Nome : "A definir")
+                                        </div>
+                                    </div>
+
+                                    @if (jogo.WoA || jogo.WoB)
+                                    {
+                                        <span class="badge bg-danger mt-2">Decisão por W.O.</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

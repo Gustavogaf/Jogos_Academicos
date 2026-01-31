@@ -24,5 +24,7 @@ namespace Jogos_Academicos.Models
         public virtual Esporte Esporte { get; set; }
 
         public virtual ICollection<Grupo> Grupos { get; set; } = new List<Grupo>();
+
+        public virtual ICollection<Jogo> Jogos { get; set; } = new List<Jogo>();
     }
 }
