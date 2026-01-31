@@ -1,0 +1,101 @@
+/* Seu CSS Existente */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+h2 {
+    display: flex;
+    justify-content: center;
+    font-family: 'Times New Roman', Times, serif;
+    color:  #6d28d9;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+form {
+    width: 350px;
+    height: 370px;
+    border: 1px solid  #6d28d9;
+    border-radius: 10px;
+    padding: 20px;
+}
+input::placeholder {
+    color:  #6d28d9;
+    opacity: 1;
+}
+.um {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    margin: 10px;
+    padding: 2px;
+}
+.dois {
+    display: flex;
+    justify-content: end;
+    margin: 0 20px;
+    height: 20px;
+}
+.bnt {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+label {
+    color:  #6d28d9;
+    font-size: 0.9em;
+}
+input {
+    height: 30px;
+    padding: 5px;
+    border: 1px solid  #6d28d9;
+    border-radius: 5px;
+}
+#message {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    font-size: 1em;
+    font-family: 'Times New Roman', Times, serif;
+}
+button {
+    display: grid;
+    grid-template-columns: 310px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid  #6d28d9;
+    background-color:  #6d28d9;
+    border-radius: 5px;
+    height: 35px;
+    color: white;
+    padding: 5px;
+}
+a {
+    text-decoration: none;
+    color:  #6d28d9;
+    font-size: 0.9em;
+}
+
+/* Novos estilos para a funcionalidade de mostrar/ocultar senha */
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 40px; /* Adiciona espaço para o ícone */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 65%; /* Ajusta a posição vertical do ícone */
+    transform: translateY(-50%);
+    cursor: pointer;
+    color:  #6d28d9;
+}

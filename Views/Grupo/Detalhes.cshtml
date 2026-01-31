@@ -1,0 +1,137 @@
+﻿@model Jogos_Academicos.Models.Grupo
+
+@{
+    ViewData["Title"] = "Detalhes do Grupo";
+}
+
+<div class="container" style="padding: 20px;">
+    <h2>@Model.Nome</h2>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div style="color: green; font-weight: bold; margin-bottom: 15px;">@TempData["Sucesso"]</div>
+    }
+    @if (TempData["Erro"] != null)
+    {
+        <div style="color: red; font-weight: bold; margin-bottom: 15px;">@TempData["Erro"]</div>
+    }
+
+    <h3 style="margin-top: 20px;">Classificação</h3>
+
+    @if (ViewBag.Classificacao != null)
+    {
+        <table class="table" style="width: 100%; border-collapse: collapse; margin-bottom: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+            <thead style="background-color: #6d28d9; color: white;">
+                <tr>
+                    <th style="padding: 10px;">Pos</th>
+                    <th style="padding: 10px; text-align: left;">Equipe</th>
+                    <th style="padding: 10px; text-align: center;">PTS</th>
+                    <th style="padding: 10px; text-align: center;">J</th>
+                    <th style="padding: 10px; text-align: center;">V</th>
+                    <th style="padding: 10px; text-align: center;">E</th>
+                    <th style="padding: 10px; text-align: center;">D</th>
+                    <th style="padding: 10px; text-align: center;">SG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int posicao = 1;
+                }
+                @foreach (var time in (IEnumerable<Jogos_Academicos.Models.ClassificacaoGrupo>)ViewBag.Classificacao)
+                {
+                    int jogosJogados = time.Vitorias + time.Empates + time.Derrotas;
+
+                    <tr style="border-bottom: 1px solid #ddd; background-color: white;">
+                        <td style="padding: 10px; text-align: center; font-weight: bold;">@posicao</td>
+                        <td style="padding: 10px;">@time.Equipe.Nome</td>
+                        <td style="padding: 10px; text-align: center; font-weight: bold; color: #6d28d9;">@time.Pontos</td>
+                        <td style="padding: 10px; text-align: center;">@jogosJogados</td>
+                        <td style="padding: 10px; text-align: center;">@time.Vitorias</td>
+                        <td style="padding: 10px; text-align: center;">@time.Empates</td>
+                        <td style="padding: 10px; text-align: center;">@time.Derrotas</td>
+                        <td style="padding: 10px; text-align: center;">@time.SaldoGols</td>
+                    </tr>
+                    posicao++;
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>A classificação será gerada após o primeiro jogo.</p>
+    }
+
+    <hr />
+
+    <h3>Equipes Participantes</h3>
+    <ul>
+        @foreach (var equipe in Model.Equipes)
+        {
+            <li>@equipe.Nome</li>
+        }
+    </ul>
+
+    <hr />
+
+    <h3>Tabela de Jogos</h3>
+
+    @if (!Model.Jogos.Any())
+    {
+        <p>Nenhum jogo gerado ainda.</p>
+
+        @if (User.IsInRole("Coordenador"))
+        {
+            <form asp-action="GerarJogos" method="post">
+                <input type="hidden" name="grupoId" value="@Model.Id" />
+                <button type="submit" class="btn btn-primary" style="background-color: #6d28d9; color: white; padding: 10px; border: none; cursor: pointer;">
+                    Gerar Tabela de Jogos (Round Robin)
+                </button>
+            </form>
+        }
+        else
+        {
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 5px solid #6d28d9;">
+                <p style="margin: 0; color: #555;">
+                    <em>A tabela de jogos ainda não foi definida pela coordenação. Aguarde novidades!</em>
+                </p>
+            </div>
+        }
+    }
+    else
+    {
+        <table class="table" border="1" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr style="background-color: #f0f0f0;">
+                    <th>Data</th>
+                    <th>Time A</th>
+                    <th>Placar</th>
+                    <th>Time B</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var jogo in Model.Jogos.OrderBy(j => j.DataHora))
+                {
+                    <tr>
+                        <td style="padding: 8px;">@jogo.DataHora.ToString("dd/MM/yyyy")</td>
+                        <td style="padding: 8px;">@jogo.EquipeA.Nome</td>
+                        <td style="padding: 8px; text-align: center;">
+                            @(jogo.Finalizado ? $"{jogo.PlacarA} x {jogo.PlacarB}" : "vs")
+                        </td>
+                        <td style="padding: 8px;">@jogo.EquipeB.Nome</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div style="margin-top: 20px;">
+        @if (User.IsInRole("Coordenador"))
+        {
+            <a asp-controller="Evento" asp-action="Index">Voltar para Eventos</a>
+        }
+        else
+        {
+            <a asp-controller="Home" asp-action="Index">Voltar para Início</a>
+        }
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Jogos_Academicos.Models.Evento>
+
+@{
+    ViewData["Title"] = "Painel do Coordenador";
+}
+
+<link rel="stylesheet" href="~/estilo_css/coordenador.css">
+
+<div class="container-coordenador">
+    <div class="header-content">
+        <h2>Gerenciamento de Eventos</h2>
+        <a asp-action="Criar" class="btn-novo">+ Novo Evento</a>
+    </div>
+
+    <table class="table-eventos">
+        <thead>
+            <tr>
+                <th>Nome do Evento</th>
+                <th>Data</th>
+                <th>Esporte</th>
+                <th>Nível</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Nome</td>
+                    <td>@item.Data.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Esporte?.Nome</td>
+                    <td>@item.Nivel</td>
+
+                    <td>
+                        <a asp-controller="Equipe" asp-action="Criar" asp-route-eventoId="@item.Id" class="btn-acao" style="margin-bottom: 5px; display: inline-block;">
+                            Inscrever Time
+                        </a>
+
+                        @if (item.Grupos != null && item.Grupos.Any())
+                        {
+                            <div style="margin-top: 5px; border-top: 1px solid #ccc; padding-top: 5px;">
+                                <small style="color: #666;">Grupos:</small>
+                                @foreach (var grupo in item.Grupos)
+                                {
+                                    <a asp-controller="Grupo" asp-action="Detalhes" asp-route-id="@grupo.Id" style="display:block; font-size: 0.85em; color: #6d28d9; font-weight: bold;">
+                                        ➜ Gerenciar @grupo.Nome
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
