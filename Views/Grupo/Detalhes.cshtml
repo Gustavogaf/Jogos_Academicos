@@ -4,165 +4,232 @@
     ViewData["Title"] = "Detalhes do Grupo";
 }
 
-<div class="container" style="padding: 20px;">
-    <h2>@Model.Nome</h2>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/detalhes_grupo.css">
+</head>
+<body>
 
-    @if (TempData["Sucesso"] != null)
-    {
-        <div class="alert alert-success">@TempData["Sucesso"]</div>
-    }
-    @if (TempData["Erro"] != null)
-    {
-        <div class="alert alert-danger">@TempData["Erro"]</div>
-    }
+    <div class="container py-5">
 
-    <h3 style="margin-top: 20px;">Classificação</h3>
+        <div class="page-header">
+            <h2 class="group-title">
+                <i class="bi bi-grid-3x3-gap-fill"></i> @Model.Nome
+            </h2>
 
-    @if (ViewBag.Classificacao != null)
-    {
-        <table class="table table-hover" style="margin-bottom: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-            <thead style="background-color: #6d28d9; color: white;">
-                <tr>
-                    <th style="padding: 10px;">Pos</th>
-                    <th style="padding: 10px; text-align: left;">Equipe</th>
-                    <th style="padding: 10px; text-align: center;">PTS</th>
-                    <th style="padding: 10px; text-align: center;">J</th>
-                    <th style="padding: 10px; text-align: center;">V</th>
-                    <th style="padding: 10px; text-align: center;">E</th>
-                    <th style="padding: 10px; text-align: center;">D</th>
-                    <th style="padding: 10px; text-align: center;">SG</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int posicao = 1;
-                }
-                @foreach (var time in (IEnumerable<Jogos_Academicos.Models.ClassificacaoGrupo>)ViewBag.Classificacao)
-                {
-                    int jogosJogados = time.Vitorias + time.Empates + time.Derrotas;
-                    <tr>
-                        <td style="text-align: center; font-weight: bold;">@posicao</td>
-                        <td>@time.Equipe.Nome</td>
-                        <td style="text-align: center; font-weight: bold; color: #6d28d9;">@time.Pontos</td>
-                        <td style="text-align: center;">@jogosJogados</td>
-                        <td style="text-align: center;">@time.Vitorias</td>
-                        <td style="text-align: center;">@time.Empates</td>
-                        <td style="text-align: center;">@time.Derrotas</td>
-                        <td style="text-align: center;">@time.SaldoGols</td>
-                    </tr>
-                    posicao++;
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p class="text-muted">A classificação será gerada após o primeiro jogo.</p>
-    }
-
-    <hr />
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3>Equipes Participantes</h3>
-
-        @if (User.IsInRole("Coordenador"))
-        {
-            <a asp-action="GerenciarEquipes" asp-route-grupoId="@Model.Id" class="btn btn-sm btn-outline-primary" style="border-color: #6d28d9; color: #6d28d9;">
-                ⚙️ Gerenciar Equipes
-            </a>
-        }
-    </div>
-
-    @if (Model.Equipes != null && Model.Equipes.Any())
-    {
-        <ul>
-            @foreach (var equipe in Model.Equipes)
+            @if (User.IsInRole("Coordenador"))
             {
-                <li>@equipe.Nome</li>
+                <a asp-controller="Evento" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar para Eventos
+                </a>
             }
-        </ul>
-    }
-    else
-    {
-        <p class="text-muted">Nenhuma equipe adicionada a este grupo ainda.</p>
-    }
-
-    <hr />
-
-    <h3>Tabela de Jogos</h3>
-
-    @if (!Model.Jogos.Any())
-    {
-        <div class="alert alert-secondary">
-            Nenhum jogo gerado ainda.
+            else
+            {
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar ao Início
+                </a>
+            }
         </div>
 
-        @if (User.IsInRole("Arbitro"))
+        @if (TempData["Sucesso"] != null)
         {
-            <div class="alert alert-info">
-                Para gerar a tabela de jogos deste evento, acesse o
-                <a asp-controller="Evento" asp-action="PainelArbitro" class="alert-link">Painel de Gestão do Torneio</a>.
+            <div class="alert alert-success alert-dismissible fade show mb-4">
+                @TempData["Sucesso"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
-        else
+        @if (TempData["Erro"] != null)
         {
-            <p class="text-muted">Aguardando o Árbitro gerar a tabela de jogos.</p>
+            <div class="alert alert-danger alert-dismissible fade show mb-4">
+                @TempData["Erro"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
         }
-    }
-    else
-    {
-        <table class="table table-bordered table-striped" style="margin-top: 10px;">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Time A</th>
-                    <th class="text-center">Placar</th>
-                    <th>Time B</th>
-                    <th>Fase</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var jogo in Model.Jogos.OrderBy(j => j.DataHora))
-                {
-                    <tr>
-                        <td>@jogo.DataHora.ToString("dd/MM/yyyy")</td>
-                        <td class="text-end">@jogo.EquipeA.Nome</td>
-                        <td class="text-center fw-bold">
-                            @(jogo.Finalizado ? $"{jogo.PlacarA} x {jogo.PlacarB}" : "vs")
-                            @if (jogo.WoA)
-                            {
-                                <span class="badge bg-danger">W.O.</span>
-                            }
-                            @if (jogo.WoB)
-                            {
-                                <span class="badge bg-danger">W.O.</span>
-                            }
-                        </td>
-                        <td>@jogo.EquipeB.Nome</td>
-                        <td>
-                            @if (jogo.Fase == Jogos_Academicos.Models.Enums.FaseTorneio.Grupos)
-                            {
-                                <span class="badge bg-info text-dark">Fase de Grupos</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-warning text-dark">Mata-Mata</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
 
-    <div style="margin-top: 30px;">
-        @if (User.IsInRole("Coordenador"))
-        {
-            <a asp-controller="Evento" asp-action="Index" class="btn btn-outline-secondary">← Voltar para Eventos</a>
-        }
-        else
-        {
-            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">← Voltar para Início</a>
-        }
+        <div class="content-card">
+            <div class="card-title">
+                <span><i class="bi bi-trophy"></i> Classificação</span>
+                <small class="text-muted fw-normal fs-6">Atualizado automaticamente</small>
+            </div>
+
+            @if (ViewBag.Classificacao != null)
+            {
+                <div class="table-responsive">
+                    <table class="table-standings">
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Equipe</th>
+                                <th title="Pontos">PTS</th>
+                                <th title="Jogos">J</th>
+                                <th title="Vitórias">V</th>
+                                <th title="Empates">E</th>
+                                <th title="Derrotas">D</th>
+                                <th title="Saldo de Gols">SG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int posicao = 1;
+                            }
+                            @foreach (var time in (IEnumerable<Jogos_Academicos.Models.ClassificacaoGrupo>)ViewBag.Classificacao)
+                            {
+                                int jogosJogados = time.Vitorias + time.Empates + time.Derrotas;
+                                <tr>
+                                    <td class="col-pos">@posicao º</td>
+                                    <td class="col-team">@time.Equipe.Nome</td>
+                                    <td class="col-pts">@time.Pontos</td>
+                                    <td class="col-stat">@jogosJogados</td>
+                                    <td class="col-stat text-success">@time.Vitorias</td>
+                                    <td class="col-stat text-secondary">@time.Empates</td>
+                                    <td class="col-stat text-danger">@time.Derrotas</td>
+                                    <td class="col-stat fw-bold">@time.SaldoGols</td>
+                                </tr>
+                                posicao++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-hourglass-split fs-2 d-block mb-2"></i>
+                    A tabela de classificação será gerada após a realização do primeiro jogo.
+                </div>
+            }
+        </div>
+
+        <div class="content-card">
+            <div class="card-title">
+                <span><i class="bi bi-people-fill"></i> Equipes Participantes</span>
+
+                @if (User.IsInRole("Coordenador"))
+                {
+                    <a asp-action="GerenciarEquipes" asp-route-grupoId="@Model.Id" class="btn btn-sm btn-primary" style="background-color: #6d28d9; border: none;">
+                        <i class="bi bi-gear-fill"></i> Gerenciar
+                    </a>
+                }
+            </div>
+
+            @if (Model.Equipes != null && Model.Equipes.Any())
+            {
+                <ul class="teams-list">
+                    @foreach (var equipe in Model.Equipes)
+                    {
+                        <li class="team-pill">
+                            <i class="bi bi-shield-shaded"></i> @equipe.Nome
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted fst-italic">Nenhuma equipe foi adicionada a este grupo ainda.</p>
+            }
+        </div>
+
+        <div class="content-card">
+            <div class="card-title">
+                <span><i class="bi bi-calendar-event"></i> Tabela de Jogos</span>
+            </div>
+
+            @if (!Model.Jogos.Any())
+            {
+                <div class="alert alert-light border text-center py-4">
+                    <h5 class="text-muted">Nenhum jogo agendado</h5>
+
+                    @if (User.IsInRole("Arbitro"))
+                    {
+                        <p class="mb-3">Como árbitro, você pode gerar a tabela no painel.</p>
+                        <a asp-controller="Evento" asp-action="PainelArbitro" class="btn btn-outline-primary btn-sm">
+                            Ir para Painel de Gestão
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted small">Aguardando definição da tabela de jogos.</p>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table-matches">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th class="text-end" style="width: 35%;">Mandante</th>
+                                <th class="text-center" style="width: 100px;">Placar</th>
+                                <th class="text-start" style="width: 35%;">Visitante</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var jogo in Model.Jogos.OrderBy(j => j.DataHora))
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="match-date">
+                                            <i class="bi bi-calendar"></i> @jogo.DataHora.ToString("dd/MM")<br>
+                                            <i class="bi bi-clock"></i> @jogo.DataHora.ToString("HH:mm")
+                                        </div>
+                                    </td>
+
+                                    <td class="text-end fw-bold text-dark">
+                                        @jogo.EquipeA.Nome
+                                        @if (jogo.WoA)
+                                        {
+                                            <span class="badge bg-danger ms-1">W.O</span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (jogo.Finalizado)
+                                        {
+                                            <span class="score-badge">
+                                                @jogo.PlacarA - @jogo.PlacarB
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="vs-text">vs</span>
+                                        }
+                                    </td>
+
+                                    <td class="text-start fw-bold text-dark">
+                                        @if (jogo.WoB)
+                                        {
+                                            <span class="badge bg-danger me-1">W.O</span>
+                                        }
+                                        @jogo.EquipeB.Nome
+                                    </td>
+
+                                    <td class="text-center">
+                                        @if (jogo.Fase == Jogos_Academicos.Models.Enums.FaseTorneio.Grupos)
+                                        {
+                                            <span class="phase-badge phase-group">Grupos</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="phase-badge phase-knockout">Mata-Mata</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
     </div>
-</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

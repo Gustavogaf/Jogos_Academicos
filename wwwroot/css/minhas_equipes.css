@@ -1,0 +1,164 @@
+﻿/* Configuração Geral */
+body {
+    background-color: #f8f9fa;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.page-title {
+    color: #6d28d9;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Botão de Adicionar */
+.btn-new-team {
+    background-color: #6d28d9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .btn-new-team:hover {
+        background-color: #5b21b6;
+        color: white;
+    }
+
+/* Grid de Cards */
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* Cria colunas automáticas */
+    gap: 25px;
+}
+
+/* O Card da Equipe */
+.team-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e9ecef;
+    display: flex;
+    flex-direction: column;
+}
+
+    .team-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-color: #d8b4fe;
+    }
+
+/* Cabeçalho do Card */
+.card-header-custom {
+    background-color: #fff;
+    padding: 20px;
+    border-bottom: 1px solid #f1f3f5;
+    position: relative;
+}
+
+    .card-header-custom::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background-color: #6d28d9; /* Faixa roxa lateral */
+    }
+
+.team-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.course-name {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Etiqueta da Modalidade (Futsal, Vôlei, etc) */
+.sport-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ede9fe; /* Roxo bem claro */
+    color: #6d28d9;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Corpo do Card (Lista de Atletas) */
+.card-body-custom {
+    padding: 20px;
+    flex-grow: 1; /* Faz o corpo ocupar o espaço restante */
+}
+
+.athletes-label {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.athlete-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.athlete-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #f8f9fa;
+    display: flex;
+    align-items: center;
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+    .athlete-item:last-child {
+        border-bottom: none;
+    }
+
+.athlete-icon {
+    color: #6d28d9;
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+/* Estado Vazio */
+.empty-state {
+    text-align: center;
+    padding: 50px;
+    background: white;
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: #adb5bd;
+    margin-bottom: 15px;
+}

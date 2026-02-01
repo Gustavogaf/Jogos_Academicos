@@ -9,10 +9,10 @@
 </head>
 <body>
     <header class="header">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <h1 style="margin-left: 20px;">Jogos Acadêmicos</h1>
+        <div class="header-container">
+            <h1>Jogos Acadêmicos</h1>
 
-            <ul class="menu" style="margin-right: 20px;">
+            <ul class="menu">
                 <li><a asp-controller="Home" asp-action="Index">Início</a></li>
 
                 @if (User.IsInRole("Coordenador"))
@@ -28,20 +28,14 @@
                         <a class="dropdown-item fw-bold" asp-controller="Evento" asp-action="PainelArbitro">🏆 Gestão do Torneio</a>
                     </li>
                 }
+
                 @if (User.IsInRole("Tecnico"))
                 {
                     <li><a asp-controller="Equipe" asp-action="MinhasEquipes">Gerenciar Equipes</a></li>
                 }
 
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li>Olá, @User.Identity.Name</li>
-                    <li><a asp-controller="Acesso" asp-action="Logout" style="color: #ffcccc;">Sair</a></li>
-                }
-                else
-                {
-                    <li><a asp-controller="Acesso" asp-action="Login">Entrar</a></li>
-                }
+                <li class="user-info">Olá, @User.Identity.Name</li>
+                <li><a asp-controller="Acesso" asp-action="Logout" class="logout">Sair</a></li>
             </ul>
         </div>
     </header>

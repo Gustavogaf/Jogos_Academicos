@@ -3,37 +3,44 @@
 @{
     ViewData["Title"] = "Gerenciar Atletas";
 }
+<link rel="stylesheet" href="~/css/gerenciar-atletas.css" />
 
-<div class="container" style="padding: 20px;">
-    <h2 style="color: #6d28d9; margin-bottom: 20px;">Promoção de Usuários</h2>
 
-    <div class="alert alert-info">
+<div class="container-atletas">
+    <div class="atletas-header">
+        <h2>Promoção de Usuários</h2>
+    </div>
+
+    <div class="atletas-info">
         <p>
-            <strong>Como funciona:</strong> Aqui você vê todos os usuários cadastrados como "Atleta".
-            Para definir um <strong>Técnico</strong>, encontre o usuário na lista e clique em "Promover".
+            Aqui estão listados todos os usuários com perfil de <strong>Atleta</strong>.
+            Para promover alguém a <strong>Técnico</strong>, use o botão correspondente.
         </p>
-        <p><em>Nota: Árbitros já devem constar no banco de dados e não aparecem nesta lista.</em></p>
+        <small>
+            Árbitros não aparecem nesta lista.
+        </small>
     </div>
 
     @if (TempData["Sucesso"] != null)
     {
-        <div class="alert alert-success">@TempData["Sucesso"]</div>
+        <div class="atletas-alert-success">@TempData["Sucesso"]</div>
     }
+
     @if (TempData["Erro"] != null)
     {
-        <div class="alert alert-danger">@TempData["Erro"]</div>
+        <div class="atletas-alert-error">@TempData["Erro"]</div>
     }
 
     @if (!Model.Any())
     {
-        <p>Nenhum atleta encontrado no sistema.</p>
+        <p class="empty-state">Nenhum atleta encontrado.</p>
     }
     else
     {
-        <table class="table table-hover">
-            <thead style="background-color: #f8f9fa;">
+        <table class="atletas-table">
+            <thead>
                 <tr>
-                    <th>Nome</th>
+                    <th>Atleta</th>
                     <th>Matrícula</th>
                     <th>Curso</th>
                     <th>Ação</th>
@@ -44,16 +51,18 @@
                 {
                     <tr>
                         <td>
-                            <strong>@item.NomeCompleto</strong><br />
-                            <small style="color: #666;">@item.Email</small>
+                            <strong class="atleta-nome">@item.NomeCompleto</strong><br />
+                            <span class="atleta-email">@item.Email</span>
                         </td>
                         <td>@item.Matricula</td>
                         <td>@item.Curso?.Nome</td>
                         <td>
-                            <form asp-action="PromoverParaTecnico" method="post" onsubmit="return confirm('Tem certeza que deseja tornar @item.NomeCompleto um Técnico?');">
+                            <form asp-action="PromoverParaTecnico"
+                                  method="post"
+                                  onsubmit="return confirm('Promover @item.NomeCompleto para Técnico?');">
                                 <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-sm btn-outline-primary" style="border-color: #6d28d9; color: #6d28d9;">
-                                    ⬆ Tornar Técnico
+                                <button type="submit" class="btn-promover">
+                                    ⬆ Promover
                                 </button>
                             </form>
                         </td>
@@ -63,5 +72,7 @@
         </table>
     }
 
-    <a asp-controller="Evento" asp-action="Index" style="margin-top: 20px; display: inline-block;">Voltar ao Painel</a>
+    <a class="atletas-voltar" asp-controller="Evento" asp-action="Index">
+        ← Voltar ao Painel
+    </a>
 </div>

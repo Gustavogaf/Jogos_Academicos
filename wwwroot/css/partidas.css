@@ -1,0 +1,182 @@
+﻿/* Configuração Geral */
+body {
+    background-color: #f4f6f9;
+}
+
+.arbitro-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 15px;
+}
+
+    .arbitro-header h2 {
+        color: #2c3e50;
+        font-weight: 700;
+    }
+
+/* Card da Partida */
+.match-card {
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    height: 100%; /* Garante altura igual nas colunas */
+}
+
+    .match-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+/* Cabeçalho do Card (Evento e Fase) */
+.match-card-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.event-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+}
+
+.fase-badge {
+    background-color: #f59e0b;
+    color: #000;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Corpo do Card */
+.match-card-body {
+    padding: 20px;
+}
+
+.match-time {
+    display: block;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* Área do Placar (Grid System) */
+.scoreboard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.team-box {
+    width: 35%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.team-name {
+    font-weight: 700;
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    min-height: 2.4em; /* Reserva espaço para nomes de 2 linhas */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inputs de Placar */
+.score-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 30%;
+    justify-content: center;
+}
+
+.input-gols {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    color: #2c3e50;
+    transition: border-color 0.2s;
+    /* Remove setinhas do input number */
+    -moz-appearance: textfield;
+}
+
+    .input-gols::-webkit-outer-spin-button,
+    .input-gols::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .input-gols:focus {
+        border-color: #6d28d9;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+    }
+
+.versus-divider {
+    font-weight: bold;
+    color: #94a3b8;
+    font-size: 1.2rem;
+}
+
+/* Checkbox W.O. */
+.wo-section {
+    margin-top: 5px;
+}
+
+.wo-check-label {
+    font-size: 0.75rem;
+    color: #ef4444; /* Vermelho alerta */
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.form-check-input:checked {
+    background-color: #ef4444;
+    border-color: #ef4444;
+}
+
+/* Botão de Ação */
+.btn-registrar {
+    background-color: #10b981; /* Verde esmeralda */
+    color: white;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: background 0.3s;
+}
+
+    .btn-registrar:hover {
+        background-color: #059669;
+    }

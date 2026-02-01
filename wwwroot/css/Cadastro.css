@@ -1,87 +1,123 @@
-﻿* {
+﻿/* Reset Básico */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.container {
+/* Fundo da tela */
+body {
+    background-color: #f8f9fa;
+}
+
+/* 1. O Container Principal ocupa a tela toda para poder centralizar o filho */
+.login-container {
     width: 100%;
-    height: 100%;
+    min-height: 100vh; /* Garante altura total da tela para centralizar verticalmente */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 25px;
+    justify-content: center; /* Centraliza Horizontalmente */
+    align-items: center; /* Centraliza Verticalmente */
+    padding: 20px;
 }
 
-h2 {
-    margin: 10px;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #6d28d9;
-}
-
-#tipo-select option {
-    color: #6d28d9;
-    opacity: 1;
-}
-
-.item {
-    display: grid;
-    width: 38%;
-    height: 55vh;
+/* 2. A Caixa do Formulário (Onde aplicamos os 60% de LARGURA) */
+.login-box {
+    width: 50%; /* <--- AQUI ESTÁ A REGRA: 60% da largura da tela */
+    height: auto; /* A altura se ajusta sozinha conforme os campos */
+    background-color: white;
     padding: 40px;
-    border: 1px solid #6d28d9;
+    border: 2px solid #6d28d9;
     border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.caixa {
-    display: grid;
-    gap: 25px;
-    wrap: wrap;
+    /* Estilização dos Textos */
+    .login-box h2 {
+        text-align: center;
+        color: #6d28d9;
+        margin-bottom: 10px;
+    }
+
+    .login-box p {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+/* Padronização dos Inputs e Labels */
+.input-box {
+    margin-bottom: 20px;
+    width: 100%;
 }
 
-.um {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
+    .input-box label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    /* Força todos os inputs e o select a terem o mesmo tamanho e estilo */
+    .input-box input,
+    .input-box select {
+        width: 100%; /* Ocupa 100% da largura da login-box (que é 60% da tela) */
+        height: 45px;
+        padding: 10px;
+        border: 2px solid #6d28d9;
+        border-radius: 5px;
+        font-size: 16px;
+        outline: none;
+        background-color: #fff;
+    }
+
+        .input-box input:focus,
+        .input-box select:focus {
+            border-color: #4a1b94;
+            box-shadow: 0 0 5px rgba(109, 40, 217, 0.3);
+        }
+
+/* Mensagens de erro */
+.field-validation-error {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin-top: 5px;
 }
 
-.dois {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.butao {
-    display: flex;
-    justify-content: end;
-    align-items: end;
-}
-
-select {
-    border-radius: 5px;
-    padding: 7px;
-    border: 2px solid #6d28d9;
-}
-
-.t {
-    color: fieldtext;
-}
-
-input {
-    border-radius: 5px;
-    border: 2px solid #6d28d9;
-    padding: 7px;
-    height: 25px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-button {
-    justify-content: flex-end;
-    border: 1 solid #6d28d9;
-    border-radius: 5px;
-    height: 35px;
-    width: 100px;
-    padding: 3px;
+/* Botão */
+.btn-entrar {
+    width: 100%;
+    padding: 12px;
     background-color: #6d28d9;
     color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+    .btn-entrar:hover {
+        background-color: #5b21b6;
+    }
+
+.links {
+    margin-top: 20px;
+    text-align: center;
+}
+
+    .links a {
+        color: #6d28d9;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+/* Responsividade: Celular não aguenta 60% (fica muito fino), então mudamos para 90% */
+@media (max-width: 768px) {
+    .login-box {
+        width: 90%;
+        padding: 20px;
+    }
 }

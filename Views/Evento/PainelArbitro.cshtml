@@ -4,30 +4,32 @@
     ViewData["Title"] = "Gestão de Torneio";
 }
 
-<div class="container" style="padding: 20px;">
-    <h2 style="color: #6d28d9; margin-bottom: 20px;">Painel de Gestão do Árbitro</h2>
+<link rel="stylesheet" href="~/css/gestao-torneio.css" />
+
+<div class="container-torneio">
+    <h2 class="torneio-title">Painel de Gestão do Árbitro</h2>
 
     @if (TempData["Sucesso"] != null)
     {
-        <div class="alert alert-success">@TempData["Sucesso"]</div>
+        <div class="torneio-alert-success">@TempData["Sucesso"]</div>
     }
     @if (TempData["Erro"] != null)
     {
-        <div class="alert alert-danger">@TempData["Erro"]</div>
+        <div class="torneio-alert-error">@TempData["Erro"]</div>
     }
 
-    <div class="card">
-        <div class="card-header bg-dark text-white">
+    <div class="torneio-card">
+        <div class="torneio-card-header">
             Eventos Disponíveis
         </div>
-        <div class="card-body">
+        <div class="torneio-card-body">
             @if (!Model.Any())
             {
                 <p>Não há eventos cadastrados.</p>
             }
             else
             {
-                <table class="table align-middle">
+                <table class="torneio-table">
                     <thead>
                         <tr>
                             <th>Evento</th>
@@ -42,25 +44,29 @@
 
                             <tr>
                                 <td>
-                                    <strong>@item.Nome</strong><br />
-                                    <small class="text-muted">@item.Esporte?.Nome - @item.Data.ToString("dd/MM/yyyy")</small>
+                                    <div class="evento-nome">@item.Nome</div>
+                                    <div class="evento-detalhe">
+                                        @item.Esporte?.Nome - @item.Data.ToString("dd/MM/yyyy")
+                                    </div>
                                 </td>
                                 <td>
                                     @if (!temJogos)
                                     {
-                                        <span class="badge bg-secondary">Não Iniciado</span>
+                                        <span class="status-badge status-nao-iniciado">Não Iniciado</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-success">Em Andamento</span>
+                                        <span class="status-badge status-andamento">Em Andamento</span>
                                     }
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2">
+                                    <div class="acoes-container">
                                         @if (item.Grupos != null && item.Grupos.Any())
                                         {
-                                            <a asp-controller="Grupo" asp-action="Detalhes" asp-route-id="@item.Grupos.First().Id"
-                                               class="btn btn-outline-info btn-sm">
+                                            <a asp-controller="Grupo"
+                                               asp-action="Detalhes"
+                                               asp-route-id="@item.Grupos.First().Id"
+                                               class="btn-acao btn-ver">
                                                 👁 Ver Tabelas
                                             </a>
                                         }
@@ -69,16 +75,17 @@
                                         {
                                             <form asp-action="GerarJogosFaseGrupos" method="post">
                                                 <input type="hidden" name="eventoId" value="@item.Id" />
-                                                <button type="submit" class="btn btn-primary btn-sm fw-bold">
+                                                <button type="submit" class="btn-acao btn-gerar">
                                                     🎲 Gerar Fase de Grupos
                                                 </button>
                                             </form>
                                         }
                                         else
                                         {
-                                            <form asp-action="AvancarFase" method="post" onsubmit="return confirm('Deseja avançar para a próxima fase do mata-mata? Certifique-se que todos os jogos da fase atual foram finalizados.');">
+                                            <form asp-action="AvancarFase" method="post"
+                                                  onsubmit="return confirm('Deseja avançar para a próxima fase?');">
                                                 <input type="hidden" name="eventoId" value="@item.Id" />
-                                                <button type="submit" class="btn btn-warning btn-sm fw-bold">
+                                                <button type="submit" class="btn-acao btn-avancar">
                                                     ⚡ Gerar Próxima Fase
                                                 </button>
                                             </form>
@@ -93,10 +100,8 @@
         </div>
     </div>
 
-    <div class="mt-3">
-        <small class="text-muted">
-            <i class="bi bi-info-circle"></i> O botão <strong>"Gerar Fase de Grupos"</strong> cria a tabela inicial de pontos corridos.<br />
-            <i class="bi bi-lightning-charge"></i> O botão <strong>"Gerar Próxima Fase"</strong> analisa os classificados e cria as chaves eliminatórias (Oitavas, Quartas, etc).
-        </small>
+    <div class="torneio-info">
+        O botão <strong>Gerar Fase de Grupos</strong> cria a tabela inicial de pontos corridos.<br />
+        O botão <strong>Gerar Próxima Fase</strong> cria as chaves eliminatórias.
     </div>
 </div>

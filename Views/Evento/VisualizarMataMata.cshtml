@@ -3,95 +3,147 @@
 
 @{
     ViewData["Title"] = "Fase Final";
-    // Agrupa os jogos por fase para exibir separado
+    // Ordena para que a Final apareça primeiro (ou por ordem de enum se preferir)
+    // Assumindo que o Enum Final tem valor mais alto ou específico, ajuste o OrderBy conforme necessidade
     var jogosPorFase = Model.GroupBy(j => j.Fase).OrderBy(g => (int)g.Key);
 }
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-danger">🏆 Fase Final - @ViewBag.EventoNome</h2>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
-    </div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/mata_mata.css">
+</head>
+<body>
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-warning">
-            A fase de mata-mata ainda não foi gerada para este evento.
+    <div class="container py-5">
+
+        <div class="tournament-header">
+            <h2>🏆 Fase Final - @ViewBag.EventoNome</h2>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-sm mt-2">
+                ← Voltar ao Início
+            </a>
         </div>
-    }
-    else
-    {
-        @foreach (var grupoFase in jogosPorFase)
+
+        @if (!Model.Any())
         {
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="m-0">
-                        @switch (grupoFase.Key)
-                        {
-                            case FaseTorneio.Final:
-                                <text>Grande Final</text>
-                                ; break;
-                            case FaseTorneio.SemiFinal:
+            <div class="alert alert-warning text-center">
+                <h4>Ainda não há jogos definidos</h4>
+                <p>A fase de mata-mata será gerada em breve.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var grupoFase in jogosPorFase)
+            {
+                // Verifica se é a final para aplicar estilo dourado
+                bool isFinal = grupoFase.Key == FaseTorneio.Final;
+                string sectionClass = isFinal ? "phase-section phase-final" : "phase-section";
 
-                                <text>Semi-Finais</text>
-                                ; break;
-                            case FaseTorneio.QuartasFinal:
+                <div class="@sectionClass">
+                    <div class="text-center">
+                        <div class="phase-title">
+                            @switch (grupoFase.Key)
+                            {
+                                case FaseTorneio.Final:
+                                    <text>👑 GRANDE FINAL</text>
+                                    ; break;
+                                case FaseTorneio.SemiFinal:
 
-                                <text>Quartas de Final</text>
-                                ; break;
-                            case FaseTorneio.OitavasFinal:
+                                    <text>Semi-Finais</text>
+                                    ; break;
+                                case FaseTorneio.QuartasFinal:
 
-                                <text>Oitavas de Final</text>
-                                ; break;
-                            default:
+                                    <text>Quartas de Final</text>
+                                    ; break;
+                                case FaseTorneio.OitavasFinal:
 
-                                @grupoFase.Key.ToString()
-                                ; break;
-                        }
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
+                                    <text>Oitavas de Final</text>
+                                    ; break;
+                                default:
+
+                                    @grupoFase.Key.ToString()
+                                    ; break;
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
                         @foreach (var jogo in grupoFase)
                         {
-                            <div class="col-md-6 mb-3">
-                                <div class="border rounded p-3 text-center bg-light">
-                                    <small class="text-muted d-block mb-2">@jogo.DataHora.ToString("dd/MM HH:mm")</small>
+                            // Lógica para determinar classes CSS de vencedor/perdedor
+                            string classTimeA = "";
+                            string classTimeB = "";
 
-                                    <div class="d-flex justify-content-center align-items-center gap-3">
-                                        <div class="fw-bold @(jogo.PlacarA > jogo.PlacarB ? "text-success" : "")">
+                            if (jogo.Finalizado)
+                            {
+                                if (jogo.PlacarA > jogo.PlacarB)
+                                {
+                                    classTimeA = "winner-text";
+                                    classTimeB = "loser-text";
+                                }
+                                else if (jogo.PlacarB > jogo.PlacarA)
+                                {
+                                    classTimeA = "loser-text";
+                                    classTimeB = "winner-text";
+                                }
+                            }
+
+                            <div class="col-md-6 col-lg-5">
+                                <div class="match-card @(jogo.Finalizado ? "finished" : "")">
+                                    <div class="match-date">
+                                        <i class="bi bi-calendar-event"></i> @jogo.DataHora.ToString("dd/MM")
+                                        <span class="mx-1">•</span>
+                                        @jogo.DataHora.ToString("HH:mm")
+                                    </div>
+
+                                    <div class="match-content">
+                                        <div class="team-box @classTimeA">
                                             @jogo.EquipeA?.Nome
+                                            @if (classTimeA == "winner-text")
+                                            {
+                                                <span>🏅</span>
+                                            }
                                         </div>
 
-                                        <div class="bg-dark text-white px-3 py-1 rounded fw-bold">
+                                        <div>
                                             @if (jogo.Finalizado)
                                             {
-                                                <span>@jogo.PlacarA</span>
-                                                <span class="mx-1">x</span>
-
-                                                <span>@jogo.PlacarB</span>
+                                                <div class="score-board">
+                                                    @jogo.PlacarA - @jogo.PlacarB
+                                                </div>
                                             }
                                             else
                                             {
-                                                <span>vs</span>
+                                                <div class="vs-badge">VS</div>
                                             }
                                         </div>
 
-                                        <div class="fw-bold @(jogo.PlacarB > jogo.PlacarA ? "text-success" : "")">
+                                        <div class="team-box @classTimeB">
                                             @(jogo.EquipeB != null ? jogo.EquipeB.Nome : "A definir")
+                                            @if (classTimeB == "winner-text")
+                                            {
+                                                <span>🏅</span>
+                                            }
                                         </div>
                                     </div>
 
                                     @if (jogo.WoA || jogo.WoB)
                                     {
-                                        <span class="badge bg-danger mt-2">Decisão por W.O.</span>
+                                        <div class="wo-badge">
+                                            <span class="badge-danger">Decisão por W.O.</span>
+                                        </div>
                                     }
                                 </div>
                             </div>
                         }
                     </div>
                 </div>
-            </div>
+            }
         }
-    }
-</div>
+    </div>
+
+</body>
+</html>
