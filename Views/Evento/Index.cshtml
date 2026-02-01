@@ -31,28 +31,38 @@
                     <td>@item.Esporte?.Nome</td>
                     <td>@item.Nivel</td>
 
-                    <td>
-                        <div class="d-flex flex-column gap-1">
-                            <a asp-controller="Equipe" asp-action="Criar" asp-route-eventoId="@item.Id" class="btn-acao">
+                    <td class="acoes-cell">
+                        <div class="acoes-principais">
+                            <a asp-controller="Equipe"
+                               asp-action="Criar"
+                               asp-route-eventoId="@item.Id"
+                               class="btn-acao btn-outline">
                                 Inscrever Time
                             </a>
 
-                            <a asp-controller="Grupo" asp-action="Criar" asp-route-eventoId="@item.Id" class="btn-acao" style="background-color: #28a745; color: white;">
+                            <a asp-controller="Grupo"
+                               asp-action="Criar"
+                               asp-route-eventoId="@item.Id"
+                               class="btn-acao btn-success">
                                 + Novo Grupo
                             </a>
                         </div>
 
                         @if (item.Grupos != null && item.Grupos.Any())
                         {
-                            <div style="margin-top: 8px; border-top: 1px solid #ccc; padding-top: 5px;">
-                                <small style="color: #666; font-weight: bold;">Grupos:</small>
+                            <details class="grupos-box">
+                                <summary>Grupos (@item.Grupos.Count)</summary>
+
                                 @foreach (var grupo in item.Grupos)
                                 {
-                                    <a asp-controller="Grupo" asp-action="Detalhes" asp-route-id="@grupo.Id" style="display:block; font-size: 0.9em; color: #6d28d9; text-decoration: none; margin-top: 2px;">
-                                        ➜ Gerenciar @grupo.Nome
+                                    <a asp-controller="Grupo"
+                                       asp-action="Detalhes"
+                                       asp-route-id="@grupo.Id"
+                                       class="grupo-link">
+                                        ➜ @grupo.Nome
                                     </a>
                                 }
-                            </div>
+                            </details>
                         }
                     </td>
                 </tr>

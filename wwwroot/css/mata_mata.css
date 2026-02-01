@@ -1,0 +1,157 @@
+﻿/* Configuração Geral */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.tournament-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e1e4e8;
+}
+
+    .tournament-header h2 {
+        color: #c0392b; /* Vermelho escuro para dar tom de decisão */
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+/* Seção da Fase (Ex: Semi-finais) */
+.phase-section {
+    margin-bottom: 50px;
+    position: relative;
+}
+
+/* Título da Fase */
+.phase-title {
+    display: inline-block;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: white;
+    padding: 8px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+/* Estilo Especial para GRANDE FINAL */
+.phase-final .phase-title {
+    background: linear-gradient(135deg, #f1c40f, #d35400); /* Dourado */
+    color: #fff;
+    font-size: 1.3rem;
+    padding: 10px 40px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* O Card do Jogo */
+.match-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid #bdc3c7; /* Cor padrão cinza */
+    transition: transform 0.2s;
+}
+
+    .match-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Borda muda de cor se o jogo já acabou */
+    .match-card.finished {
+        border-left-color: #27ae60; /* Verde */
+    }
+
+/* Borda muda se for final */
+.phase-final .match-card {
+    border-left-color: #f39c12; /* Ouro */
+    border: 2px solid #f39c12;
+}
+
+/* Informações de Data */
+.match-date {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Container dos Times e Placar */
+.match-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Nomes dos Times */
+.team-box {
+    width: 40%;
+    text-align: center;
+    font-weight: 600;
+    color: #34495e;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 50px;
+}
+
+/* Destaque para o Vencedor */
+.winner-text {
+    color: #27ae60; /* Verde */
+    font-weight: 800;
+    transform: scale(1.05);
+}
+
+.loser-text {
+    color: #95a5a6;
+    opacity: 0.8;
+}
+
+/* O Placar Central */
+.score-board {
+    background-color: #2c3e50;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    min-width: 80px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.vs-badge {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Badge de W.O. */
+.wo-badge {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.badge-danger {
+    background-color: #e74c3c;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}

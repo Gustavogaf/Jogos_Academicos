@@ -1,11 +1,7 @@
 ﻿body {
     font-family: 'Inter', sans-serif;
-    background-color: #f0f2f5; /* Cor de fundo suave */
+    background-color: #f0f2f5;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem; /* p-4 */
     margin: 0;
 }
 
@@ -415,3 +411,86 @@
     border-top: 1px dashed #e2e8f0;
     margin: 2rem 0;
 }
+
+.table-eventos {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .table-eventos th {
+        background: #f1f5f9;
+        text-align: left;
+        padding: 12px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: #475569;
+    }
+
+    .table-eventos td {
+        padding: 12px;
+        border-top: 1px solid #e5e7eb;
+        vertical-align: top;
+    }
+
+.acoes-cell {
+    min-width: 220px;
+}
+
+.acoes-principais {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.btn-acao {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-outline {
+    border: 1px solid #7c3aed;
+    color: #7c3aed;
+}
+
+    .btn-outline:hover {
+        background: #ede9fe;
+    }
+
+.btn-success {
+    background: #22c55e;
+    color: white;
+}
+
+    .btn-success:hover {
+        background: #16a34a;
+    }
+
+/* Grupos */
+.grupos-box {
+    margin-top: 8px;
+}
+
+    .grupos-box summary {
+        cursor: pointer;
+        font-size: 0.8rem;
+        color: #6b7280;
+        font-weight: 600;
+    }
+
+.grupo-link {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #6d28d9;
+    text-decoration: none;
+}
+
+    .grupo-link:hover {
+        text-decoration: underline;
+    }
